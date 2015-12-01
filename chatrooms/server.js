@@ -38,7 +38,7 @@ function serveStatic(response, cache, absPath) {
 
 var server = http.createServer(function(request, response) {
 	var filePath = false;
-	if(request.url == '/~amontes/') {
+	if(request.url == '/~amontes/' || request.url == '/~amontes') {
 		filePath = 'public/index.html';
 	} else {
 		filePath = 'public' + request.url.replace('~amontes/', '');
