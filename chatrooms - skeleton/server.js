@@ -4,18 +4,15 @@ var path = require('path');
 var mime = require('mime');
 var cache = {};
 
-function sendFile(response, filePath, fileContents) {
-	response.writeHead(200, {'Content-Type': mime.lookup(path.basename(filePath))});
-	response.write(fileContents);
-	response.end(fileContents);
+function send404(response) {
+	response.writeHead(404, {'Content-Type': 'text/plain'});
+	response.write('Error 404: resource not found.');
+	response.end();
 }
 
-function send404(response) {
-	/*
-	 * Imitating the function above, write code to respond
-	 * with an error. Use the error code 404 and the
-	 * content type: text/plain. Write a simple text message
-	 */
+function sendFile(response, filePath, fileContents) {
+	response.writeHead(200, {'Content-Type': mime.lookup(path.basename(filePath))});
+	response.end(fileContents);
 }
 
 function serveStatic(response, cache, absPath) {
@@ -41,12 +38,11 @@ function serveStatic(response, cache, absPath) {
 
 var server = http.createServer(function(request, response) {
 	var filePath = false;
-	/*
-	 * If the request.url is /~Your_user/ or /~Your_user
-	 * Then initialize filePath to 'public/index.html'
-	 * Otherwise initialize replace /~Your_user with 'public'
-	 * and initialize filePath with that value
-	 */
+	if(request.url == '/~amontes/' || request.url == '/~amontes') {
+		filePath = 'public/index.html';
+	} else {
+		filePath = 'public' + request.url.replace('~amontes/', '');
+	}
 	var absPath = './' + filePath;
 	serveStatic(response, cache, absPath);
 });
